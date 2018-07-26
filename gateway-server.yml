@@ -1,0 +1,56 @@
+server:
+  use-forward-headers: true
+  port: 3001
+  max-http-header-size: 1048576
+  tomcat:
+    max-http-header-size: 1048576
+
+ribbon:
+  eureka:
+    enable: true
+  readTimeout: 60000
+  connectTimeout: 60000
+
+hystrix: 
+  command:
+    default: 
+      execution: 
+        isolation: 
+          thread: 
+            timeoutInMilliseconds: 10000 
+  
+zuul:
+  host:
+    socket-timeout-millis: 60000
+    connect-timeout-millis: 60000
+    connection-request-timeout-millis: 60000
+  add-host-header: true
+  add-proxy-headers: true
+  ignored-services: "*"  
+ # prefix: /api
+  routes: 
+    uaa-ui:
+      path: /**
+      service-id: uaa-server
+      sensitiveHeaders:
+      strip-prefix: true
+    uaa:
+      path: /uaa/**
+      service-id: uaa-server
+      sensitiveHeaders:
+      strip-prefix: true
+    user-rs:
+      path: /userrs/**
+      service-id: user-rs
+      sensitiveHeaders:
+      strip-prefix: true
+eureka:
+  client:
+    enabled: true
+    service-url:
+      defaultZone: http://discovery-server:8761/eureka/
+  instance:
+    hostname: gateway-server
+    home-page-url: http://${eureka.instance.hostname}:${server.port}/
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 10
