@@ -1,0 +1,43 @@
+server:
+  use-forward-headers: true
+  port: 8282
+eureka:
+  client:
+    enabled: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    hostname: localhost
+    home-page-url: http://${eureka.instance.hostname}:${server.port}/
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 10
+    
+security:
+  oauth2:
+    resource:
+      token-info-uri: http://localhost:3001/uaa/oauth/check_token
+    client:
+      client-id: avaliacaomv
+      client-secret: avaliacaomv
+#LIQUIBASE
+spring:
+  liquibase:
+    change-log: classpath:liquibase/base.xml
+
+#H2
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+
+#DATABSE
+  jpa:
+    hibernate:
+      ddl-auto: none
+  datasource:
+    url: jdbc:h2:file:~/userrsdb
+    username: sa
+    password: 
+    driver-class-name: org.h2.Driver
